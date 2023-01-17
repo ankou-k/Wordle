@@ -104,7 +104,7 @@ public class WordleUtils {
          }
 		}
 		char letter;
-      int index
+      int index;
 		for (int i = 0; i < length; i++) {
       
 			letter = guess.charAt(i);
@@ -113,11 +113,11 @@ public class WordleUtils {
          //if index < 0 then the guessed letter is not in the answer/already been found
          if (index >= 0) {
             
-            //guessed letter is in the answer so set it to yello
+            //guessed letter is in the answer so set it to yellow
             results.set(i, true);
             
             //replace the letter in answer with replaceChar so it's not found again
-				answer = replace(answer, count, replaceChar);
+				answer = replace(answer, index, replaceChar);
          }
 		}
 		return results;
@@ -191,23 +191,39 @@ public class WordleUtils {
 			TreeSet<Character> included,
 			TreeSet<Character> excluded, 
 			TreeSet<Character> possible) {
-		if (guess.length() < answer.length()) {
-			throw new IllegalArgumentException("The guess and the answer have different lengths.");
-		}
-		ArrayList<Boolean> green = isGreen(guess, answer);
-		ArrayList<Boolean> yellow = isYellow(guess, answer);
+      
+      //get letter colours
+      ArrayList<WordleColor> colours = getColors(guess, answer);
+      
 		int length = guess.length();
+      char c;
 		for (int i = 0; i < length; i++) {
-			if (green.get(i) || yellow.get(i) ) {
-				included.add(guess.charAt(i));
-			}
-			possible.remove(guess.charAt(i));
+         c = guess.charAt(i);
+         possible.remove(c);
+      
+			if (colours.get(i) != WordleColor.GRAY) {
+            
+            //add letter to included
+				included.add(c);
+            
+            //remove from excluded
+            //bc letter might be in excluded if guess contains duplicated letters
+            excluded.remove(c);
+            
+			} else {
+            // add to excluded only if not already in included
+				if (!included.contains(c)) {
+					excluded.add(c);
+				}
+         }
 		}
 		
-		for (int i = 0; i < length; i++) {
-			if (!included.contains(guess.charAt(i))){
-				excluded.add(guess.charAt(i));
+      if (guess.equals(answer)) {
+			// all remaining possible letters are not in the answer word
+			for (Character p : possible) {
+				excluded.add(p);
 			}
+		   possible.clear();
 		}
 		
 	}

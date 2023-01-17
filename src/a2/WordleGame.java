@@ -75,7 +75,7 @@ public class WordleGame extends JFrame implements ActionListener {
 		}
 		this.guess.setText("");
 		this.answer = WORDS[rng.nextInt(WORDS.length)];
-		System.out.println(this.answer);
+		//System.out.println(this.answer);
 		this.guessNumber = 0;
 		this.gameOver = false;
 	}
