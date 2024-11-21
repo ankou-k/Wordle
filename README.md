@@ -1,5 +1,5 @@
 # Wordle
 
-Fun Word Puzzle Game
+Welcome to Wordle, the Fun Word Puzzle Game
 
 Utilizes Java ArrayList and TreeSet
